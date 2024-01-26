@@ -10,6 +10,9 @@ defineProps({
   code: {
     type: String,
   },
+  count: {
+    type: Number,
+  }
 });
 
 const form = useForm({
@@ -43,6 +46,11 @@ const submit = () => {
 
       <div v-if="code" class="mt-1 mb-4 font-medium text-sm text-green-600">
         <a :href="route('shortlink.link', code)" target="_blank">{{ route('shortlink.link', code) }}</a>
+
+        <div class="flex gap-1 mt-1">
+          <div>Количество редиктов:</div>
+          <div>{{ count }}</div>
+        </div>
       </div>
     </form>
   </GuestLayout>

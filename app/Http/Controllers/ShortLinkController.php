@@ -14,6 +14,7 @@ class ShortLinkController extends Controller
   {
     return Inertia::render('Welcome', [
       'code' => '',
+      'count' => 0,
     ]);
   }
 
@@ -21,20 +22,12 @@ class ShortLinkController extends Controller
   {
     $data = $request->validated();
 
-    $result = Cache::get($data['link'], false);
-
-    if ($result) {
-      return inertia('Welcome', [
-        'code' => $result,
-      ]);
-    }
-
     $shortlink = ShortLink::where($data)->first();
 
     if (isset($shortlink)) {
-      Cache::put($shortlink->link, $shortlink->code, 60);
       return inertia('Welcome', [
         'code' => $shortlink->code,
+        'count' => $shortlink->count,
       ]);
     }
 
@@ -43,6 +36,7 @@ class ShortLinkController extends Controller
 
     return inertia('Welcome', [
       'code' => $shortlink['code'],
+      'count' => $shortlink['count'],
     ]);
   }
 
@@ -50,6 +44,9 @@ class ShortLinkController extends Controller
   {
     $shortlink = ShortLink::where('code', $code)->first();
     if (isset($shortlink)) {
+      $count = $shortlink->count;
+      $shortlink->count = ++$count;
+      $shortlink->save();
       return redirect($shortlink->link);
     }
   }
