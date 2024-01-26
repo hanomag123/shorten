@@ -36,12 +36,12 @@ const submit = () => {
       </div>
 
       <div class="flex items-end mt-4">
-        <PrimaryButton class="ms-4 ml-auto" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+        <PrimaryButton class="ml-auto" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
           Отправить
         </PrimaryButton>
       </div>
 
-      <div v-if="code" class="mb-4 font-medium text-sm text-green-600">
+      <div v-if="code" class="mt-1 mb-4 font-medium text-sm text-green-600">
         <a :href="route('shortlink.link', code)" target="_blank">{{ route('shortlink.link', code) }}</a>
       </div>
     </form>

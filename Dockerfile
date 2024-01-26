@@ -1,6 +1,8 @@
 FROM php:8.1-apache
-RUN apt-get update && apt-get install -y zlib1g-dev libpng-dev libzip-dev\
+
+RUN apt-get update && apt-get install -y zlib1g-dev libpng-dev libzip-dev \
     && docker-php-ext-install pdo pdo_mysql mysqli zip gd
+
 RUN a2enmod rewrite
 
 RUN apt-get install -y --no-install-recommends \
@@ -24,6 +26,11 @@ RUN pecl install mcrypt-1.0.5
 RUN apt-get install -y \
       ca-certificates \
       unzip
+
+# Install Redis
+RUN pecl install redis
+RUN docker-php-ext-enable redis
+RUN apt-get install -y redis-server redis-tools
 
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 

@@ -7,25 +7,31 @@ services:
       - APACHE_RUN_USER=#1000
       - COMPOSER_MEMORY_LIMIT=-1
     volumes:
-      - ./:/var/www/html                    # прокидывания содержимого всех файлов проекта в папку /var/www/html контейнера
+      - ./:/var/www/html
     ports:
-      - 8115:80                             # 8095 - порт по к-рому доступен сайт вне контейнера (т.е. http://localhost:8095 )
-    working_dir: /var/www/html              # путь к файлам сайта внутри контейнера
+      - 8115:80
+    working_dir: /var/www/html
 
   db:
     image: mariadb
     environment:
-      MYSQL_ROOT_PASSWORD: root             # пароль для базы данных (логин по умолчанию root)
-      MYSQL_DATABASE: ddu10       # имя базы данных
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ddu10
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     links:
       - db:db
     ports:
-      - 9115:80                             # 9095 - порт по к-рому доступен phpMyAdmin вне контейнера (т.е. http://localhost:9095 )
+      - 9115:80
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - UPLOAD_LIMIT=64M
     depends_on:
       - db
+      - redis
+
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
